@@ -1,0 +1,135 @@
+.help-page {
+  padding: 32px;
+  background: #f8f9fb;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.help-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+}
+
+.help-hero-icon {
+  color: #6c63ff;
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+  border-radius: 50%;
+  padding: 12px;
+  box-shadow: 0 4px 24px rgba(108, 99, 255, 0.10);
+}
+
+.help-hero h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #23244a;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.help-hero-desc {
+  color: #5146d6;
+  font-size: 1.1rem;
+  margin: 0;
+  text-align: center;
+}
+
+.help-content {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 32px rgba(44, 62, 80, 0.10);
+  padding: 36px 32px;
+  max-width: 700px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.help-faq h2,
+.help-contact h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #5146d6;
+  margin-bottom: 20px;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.faq-item {
+  background: linear-gradient(90deg, #f3f4f6 0%, #e0e7ff 100%);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(108, 99, 255, 0.06);
+  padding: 18px 22px;
+  transition: box-shadow 0.2s;
+}
+
+.faq-item:hover {
+  box-shadow: 0 6px 24px rgba(108, 99, 255, 0.13);
+}
+
+.faq-q {
+  font-weight: 600;
+  color: #23244a;
+  font-size: 1.08rem;
+  margin-bottom: 6px;
+}
+
+.faq-a {
+  color: #374151;
+  font-size: 1rem;
+}
+
+.help-contact .contact-card {
+  background: linear-gradient(90deg, #e0e7ff 0%, #f0fdf4 100%);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(34, 197, 94, 0.08);
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.contact-card p {
+  color: #374151;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.contact-btn {
+  background: linear-gradient(90deg, #6c63ff 0%, #22c55e 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 28px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 2px 12px rgba(44, 62, 80, 0.10);
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-top: 8px;
+  display: inline-block;
+}
+
+.contact-btn:hover {
+  background: linear-gradient(90deg, #5146d6 0%, #16a34a 100%);
+  box-shadow: 0 6px 24px rgba(44, 62, 80, 0.15);
+}
+
+@media (max-width: 768px) {
+  .help-page {
+    padding: 12px;
+  }
+  .help-content {
+    padding: 16px 6px;
+  }
+} 

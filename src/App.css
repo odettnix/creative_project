@@ -1,38 +1,93 @@
-.App {
+/* Основной контейнер приложения */
+.dashboard-root {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Главная область контента */
+.dashboard-main {
+  flex: 1;
+  margin-left: 246px; /* Ширина развернутого сайдбара */
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  background: #f8f9fb;
+}
+
+/* Когда сайдбар свернут */
+.dashboard-main.collapsed {
+  margin-left: 64px; /* Ширина свернутого сайдбара */
+}
+
+/* Контентная область */
+.dashboard-content {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Базовые стили для страниц */
+.page-container {
+  padding: 32px;
+  min-height: 100vh;
+  background: #f8f9fb;
+  transition: all 0.3s ease;
+}
+
+/* Для временных заглушек */
+.placeholder-page {
+  padding: 32px;
+  min-height: 100vh;
+  background: #f8f9fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #6b7280;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.placeholder-page div {
+  background: #fff;
+  padding: 48px;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(44, 62, 80, 0.08);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .dashboard-main {
+    margin-left: 0;
+  }
+  
+  .dashboard-main.sidebar-collapsed {
+    margin-left: 0;
+  }
+  
+  .page-container {
+    padding: 16px;
+  }
+  
+  .placeholder-page {
+    padding: 16px;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+/* Глобальные стили для скроллбара */
+.dashboard-content::-webkit-scrollbar {
+  width: 6px;
 }
 
-.App-link {
-  color: #61dafb;
+.dashboard-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.dashboard-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.dashboard-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }

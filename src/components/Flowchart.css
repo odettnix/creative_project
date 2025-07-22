@@ -1,0 +1,356 @@
+.flowchart-page {
+    padding: 32px;
+    background: #f8f9fb;
+    min-height: 100vh;
+  }
+  
+  .flowchart-page h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1b23;
+    margin-bottom: 32px;
+  }
+  
+  /* Фильтры флоучарта */
+  .flowchart-filters {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 16px rgba(44, 62, 80, 0.08);
+    padding: 24px;
+    margin-bottom: 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .filter-label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.875rem;
+    margin-bottom: 8px;
+  }
+  
+  .filter-select {
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    background: #fff;
+    color: #374151;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 40px;
+  }
+  
+  .filter-select:hover {
+    border-color: #d1d5db;
+  }
+  
+  .filter-select:focus {
+    outline: none;
+    border-color: #6c63ff;
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+  }
+  
+  /* Медиа типы чекбоксы */
+  .media-types {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 16px rgba(44, 62, 80, 0.08);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .media-checkboxes {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  
+  .media-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .media-checkbox:hover {
+    transform: translateY(-1px);
+  }
+  
+  .media-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #d1d5db;
+    border-radius: 4px;
+    cursor: pointer;
+    appearance: none;
+    position: relative;
+    transition: all 0.2s ease;
+  }
+  
+  .media-checkbox input[type="checkbox"]:checked {
+    background: #6c63ff;
+    border-color: #6c63ff;
+  }
+  
+  .media-checkbox input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  
+  .media-checkbox label {
+    color: #374151;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  
+  .export-button {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  
+  .export-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
+  }
+  
+  /* Таблица флоучарта */
+  .flowchart-table-container {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 16px rgba(44, 62, 80, 0.08);
+    overflow: hidden;
+  }
+  
+  .flowchart-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .flowchart-table thead {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-bottom: 2px solid #e2e8f0;
+  }
+  
+  .flowchart-table th {
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  
+  .flowchart-table th:first-child {
+    /* padding-left: 24px; */
+    min-width: 150px;
+  }
+  
+  .flowchart-table tbody tr {
+    border-bottom: 1px solid #f3f4f6;
+    transition: all 0.2s ease;
+  }
+  
+  .flowchart-table tbody tr:hover {
+    background: #f8fafc;
+  }
+  
+  .flowchart-table tbody tr:last-child {
+    border-bottom: none;
+  }
+  
+  .flowchart-table td {
+    padding: 16px 20px;
+    color: #374151;
+    font-size: 0.95rem;
+    vertical-align: middle;
+  }
+  
+  /* .flowchart-table td:first-child {
+    padding-left: 24px;
+  } */
+  
+  /* Стили для брендов */
+  .brand-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    color: #1f2937;
+  }
+  
+  .brand-expand {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6c63ff;
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 30px;
+    max-height: 30px;
+  }
+  
+  .brand-expand:hover {
+    transform: scale(1.1);
+  }
+  
+  .brand-expand.expanded {
+    transform: rotate(90deg);
+  }
+  
+  /* Стили для развернутых строк */
+  .expanded-row {
+    background: #f8fafc;
+    border-left: 4px solid #6c63ff;
+  }
+  
+  /* .expanded-row td {
+    padding-left: 44px;
+  } */
+  
+  .media-type-row {
+    background: #f1f5f9;
+    border-left: 4px solid #22c55e;
+  }
+  
+  .media-type-row td {
+    /* padding-left: 60px; */
+    font-weight: 500;
+    color: #059669;
+  }
+  
+  .creative-row {
+    background: #fefce8;
+    border-left: 4px solid #f59e0b;
+  }
+  
+  .creative-row td {
+    /* padding-left: 80px; */
+    font-weight: 400;
+    color: #92400e;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .creative-row:hover td {
+    color: #f59e0b;
+    font-weight: 500;
+  }
+  
+  /* Значения в ячейках */
+  .cell-value {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-align: center;
+    min-width: 40px;
+    background: #f1f5f9;
+    color: #475569;
+    transition: all 0.2s ease;
+  }
+  
+  .cell-value:hover {
+    background: #e2e8f0;
+    transform: scale(1.05);
+  }
+  
+  .cell-value.high-value {
+    background: #dcfce7;
+    color: #166534;
+  }
+  
+  .cell-value.medium-value {
+    background: #fef3c7;
+    color: #92400e;
+  }
+  
+  .cell-value.low-value {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+  
+  /* Адаптивность */
+  @media (max-width: 1200px) {
+    .flowchart-table-container {
+      overflow-x: auto;
+    }
+    
+    .flowchart-table {
+      min-width: 1000px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .flowchart-page {
+      padding: 16px;
+    }
+    
+    .flowchart-filters {
+      grid-template-columns: 1fr;
+      padding: 20px;
+    }
+    
+    .media-types {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    
+    .media-checkboxes {
+      justify-content: flex-start;
+    }
+    
+    .flowchart-table th,
+    .flowchart-table td {
+      padding: 12px 8px;
+      font-size: 0.85rem;
+    }
+    
+    /* .flowchart-table th:first-child,
+    .flowchart-table td:first-child {
+      padding-left: 12px;
+    } */
+  }
