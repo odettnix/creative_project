@@ -373,7 +373,7 @@ const Flowchart: React.FC<FlowchartProps> = ({ sidebarCollapsed = false }) => {
 
   return (
     <div className="flowchart-page">
-      <h1>Флоучарт</h1>
+      {/* <h1>Флоучарт</h1> */}
       
       {/* Фильтры */}
       <div className="flowchart-filters">
