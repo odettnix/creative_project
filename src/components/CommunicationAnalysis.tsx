@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import './CommunicationAnalysis.css';
+import './SelectStyles.css';
 import { TrendingUp, BarChart3, PieChart, X, Play } from 'lucide-react';
+import CategorySelect from './CategorySelect';
+import SubcategorySelect from './SubcategorySelect';
+import BrandSelect from './BrandSelect';
+import CreativeSelect from './CreativeSelect';
+import CreativeModal from './CreativeModal';
+import { creativeService, Creative, Brand, Category, Subcategory } from '../api';
 import { 
   LineChart, 
   Line, 
@@ -21,6 +28,7 @@ import {
   Tooltip
 } from 'recharts';
 import CustomTooltip from './CustomTooltip';
+
 
 type AnalyticsProps = {
   sidebarCollapsed?: boolean;
@@ -87,13 +95,18 @@ interface RadarData {
 
 const Analytics: React.FC<AnalyticsProps> = ({ sidebarCollapsed = false }) => {
   const [filters, setFilters] = useState({
-    category: 'Выберите категорию',
-    subcategory: 'Выберите подкатегорию',
-    advertiser: 'Выберите рекламодателя',
-    creative: 'Выберите креатив'
+    category: 'Все категории',
+    subcategory: 'Все подкатегории',
+    advertiser: 'Все рекламодатели',
+    creative: 'Все креативы'
   });
   
   const [showPreview, setShowPreview] = useState(false);
+  const [selectedCreative, setSelectedCreative] = useState<Creative | null>(null);
+  const [isCreativeModalOpen, setIsCreativeModalOpen] = useState(false);
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
 
   const handleFilterChange = (filterName: string, value: string) => {
     setFilters(prev => ({
@@ -102,13 +115,77 @@ const Analytics: React.FC<AnalyticsProps> = ({ sidebarCollapsed = false }) => {
     }));
   };
 
-  const handleShowCreative = () => {
-    setShowPreview(true);
+  const loadReferenceData = async () => {
+    try {
+      const [brandsData, categoriesData, subcategoriesData] = await Promise.all([
+        creativeService.getBrands(),
+        creativeService.getCategories(),
+        creativeService.getSubcategories()
+      ]);
+      
+      setBrands(brandsData);
+      setCategories(categoriesData);
+      setSubcategories(subcategoriesData);
+    } catch (error) {
+      console.error('Ошибка загрузки справочных данных:', error);
+    }
+  };
+
+  const getBrandName = (brandId: number): string => {
+    const brand = brands.find(b => b.id === brandId);
+    return brand?.name || 'Неизвестный бренд';
+  };
+
+  const getCategoryName = (categoryId: number): string => {
+    const category = categories.find(c => c.id === categoryId);
+    return category?.name || 'Неизвестная категория';
+  };
+
+  const getSubcategoryName = (subcategoryId: number): string => {
+    const subcategory = subcategories.find(s => s.id === subcategoryId);
+    return subcategory?.name || 'Неизвестная подкатегория';
+  };
+
+  const handleShowCreative = async () => {
+    // Проверяем, выбран ли креатив
+    if (filters.creative === 'Все креативы') {
+      alert('Пожалуйста, выберите креатив для просмотра');
+      return;
+    }
+
+    try {
+      // Извлекаем id_orig из выбранного креатива
+      const idOrig = parseInt(filters.creative.replace('ID: ', ''));
+      
+      if (isNaN(idOrig)) {
+        alert('Ошибка: неверный ID креатива');
+        return;
+      }
+
+      // Загружаем креатив из БД
+      const creativeData = await creativeService.getCreativeById(idOrig);
+      
+      setSelectedCreative(creativeData);
+      setIsCreativeModalOpen(true);
+    } catch (error) {
+      console.error('Ошибка загрузки креатива:', error);
+      alert('Ошибка загрузки креатива. Попробуйте еще раз.');
+    }
   };
 
   const handleClosePreview = () => {
     setShowPreview(false);
   };
+
+  const handleCloseCreativeModal = () => {
+    setIsCreativeModalOpen(false);
+    setSelectedCreative(null);
+  };
+
+  // Загружаем справочные данные при монтировании компонента
+  React.useEffect(() => {
+    loadReferenceData();
+  }, []);
 
 
 
@@ -120,62 +197,30 @@ const Analytics: React.FC<AnalyticsProps> = ({ sidebarCollapsed = false }) => {
       
       {/* Фильтры */}
       <div className="analytics-filters">
-        <div className="filter-group">
-          <label className="filter-label">Категория</label>
-          <select 
-            className="filter-select"
+        <CategorySelect
             value={filters.category}
-            onChange={(e) => handleFilterChange('category', e.target.value)}
-          >
-            <option>Выберите категорию</option>
-            <option>Банки</option>
-            <option>Автомобили</option>
-            <option>Еда и напитки</option>
-            <option>Телекоммуникации</option>
-          </select>
-        </div>
+          onChange={(value) => handleFilterChange('category', value)}
+          placeholder="Выберите категорию"
+        />
         
-        <div className="filter-group">
-          <label className="filter-label">Подкатегория</label>
-          <select 
-            className="filter-select"
+        <SubcategorySelect
             value={filters.subcategory}
-            onChange={(e) => handleFilterChange('subcategory', e.target.value)}
-          >
-            <option>Выберите подкатегорию</option>
-            <option>Кредиты</option>
-            <option>Депозиты</option>
-            <option>Ипотека</option>
-          </select>
-        </div>
+          onChange={(value) => handleFilterChange('subcategory', value)}
+          selectedCategory={filters.category}
+          placeholder="Все подкатегории"
+        />
         
-        <div className="filter-group">
-          <label className="filter-label">Рекламодатель</label>
-          <select 
-            className="filter-select"
+        <BrandSelect
             value={filters.advertiser}
-            onChange={(e) => handleFilterChange('advertiser', e.target.value)}
-          >
-            <option>Выберите рекламодателя</option>
-            <option>Сбербанк</option>
-            <option>ВТБ</option>
-            <option>Альфа-Банк</option>
-          </select>
-        </div>
+          onChange={(value) => handleFilterChange('advertiser', value)}
+          placeholder="Выберите рекламодателя"
+        />
         
-        <div className="filter-group">
-          <label className="filter-label">Креатив</label>
-          <select 
-            className="filter-select"
-            value={filters.creative}
-            onChange={(e) => handleFilterChange('creative', e.target.value)}
-          >
-            <option>Выберите креатив</option>
-            <option>Кредитная карта</option>
-            <option>Ипотека 2024</option>
-            <option>Депозит Победа</option>
-          </select>
-        </div>
+        <CreativeSelect
+          value={filters.creative}
+          onChange={(value) => handleFilterChange('creative', value)}
+          placeholder="Все креативы"
+        />
       </div>
 
       {/* Основная сетка */}
@@ -348,24 +393,26 @@ const Analytics: React.FC<AnalyticsProps> = ({ sidebarCollapsed = false }) => {
         </div>
       </div>
 
-      {/* Модальное окно просмотра креатива */}
-      {showPreview && (
-        <div className="creative-preview-modal" onClick={handleClosePreview}>
-          <div className="creative-preview-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-preview" onClick={handleClosePreview}>
-              <X size={16} />
-            </button>
-            
-            <div className="preview-icon">
-              <Play size={32} />
-            </div>
-            
-            <h3 className="preview-title">Просмотр креатива</h3>
-            <p className="preview-subtitle">Здесь отображается выбранный креативный материал</p>
-            <p className="preview-description">Расширив для демонстрации функционала</p>
-          </div>
-        </div>
-      )}
+              {/* Модальное окно просмотра креатива */}
+        {isCreativeModalOpen && selectedCreative && (
+          <CreativeModal
+            isOpen={isCreativeModalOpen}
+            onClose={handleCloseCreativeModal}
+                          data={{
+                date: selectedCreative.date_time || new Date().toLocaleDateString('ru-RU'),
+                brand: selectedCreative.brand_id ? getBrandName(selectedCreative.brand_id) : 'Неизвестный бренд',
+                category: selectedCreative.category_id ? getCategoryName(selectedCreative.category_id) : 'Неизвестная категория',
+                subcategory: selectedCreative.subcategory_id ? getSubcategoryName(selectedCreative.subcategory_id) : 'Неизвестная подкатегория',
+                media: 'Баннерная реклама',
+                ots: '1,250,000',
+                status: 'Активен',
+                firstAirDate: selectedCreative.date_time || new Date().toLocaleDateString('ru-RU'),
+                id_orig: selectedCreative.id_orig?.toString(),
+                file_link: selectedCreative.file_link,
+                date_time: selectedCreative.date_time
+              }}
+          />
+        )}
     </div>
   );
 };

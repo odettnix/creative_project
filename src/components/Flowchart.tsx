@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Flowchart.css';
+import './SelectStyles.css';
 import { ChevronRight, Download } from 'lucide-react';
 import CreativeModal from './CreativeModal'; // Импортируем уже созданный компонент
 import CustomTooltip from './CustomTooltip';

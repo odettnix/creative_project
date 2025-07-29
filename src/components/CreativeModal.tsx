@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './CreativeModal.css';
 import { X, Play, Download, Share2, Eye, Calendar, Building2, Tag, Layers, Tv2, TrendingUp, Activity } from 'lucide-react';
 
@@ -11,6 +11,9 @@ interface CreativeData {
   ots: string;
   status: string;
   firstAirDate?: string;
+  id_orig?: string;
+  file_link?: string;
+  date_time?: string;
 }
 
 interface CreativeModalProps {
@@ -48,11 +51,29 @@ const getMediaIcon = (media: string) => {
 };
 
 const CreativeModal: React.FC<CreativeModalProps> = ({ isOpen, onClose, data }) => {
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+
   if (!isOpen) return null;
 
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
+    }
+  };
+
+  const handleImageClick = () => {
+    if (data.file_link) {
+      setIsImageModalOpen(true);
+    }
+  };
+
+  const handleImageModalClose = () => {
+    setIsImageModalOpen(false);
+  };
+
+  const handleImageModalOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      handleImageModalClose();
     }
   };
 
@@ -127,6 +148,38 @@ const CreativeModal: React.FC<CreativeModalProps> = ({ isOpen, onClose, data }) 
 
             <div className="info-row">
               <span className="info-label">
+                <Calendar size={16} style={{ display: 'inline', marginRight: '8px' }} />
+                Дата последнего выхода:
+              </span>
+              <span className="info-value">
+                {data.date_time && data.date_time !== 'null' && data.date_time !== '' ? (
+                  <>
+                    {new Date(data.date_time).toLocaleDateString('ru-RU', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                    {/* <br /> */}
+                    {/* <small style={{ color: '#6b7280', fontSize: '12px' }}>
+                      Raw: {data.date_time}
+                    </small> */}
+                  </>
+                ) : (
+                  <>
+                    Н/Д
+                    <br />
+                    <small style={{ color: '#6b7280', fontSize: '12px' }}>
+                      Raw: {data.date_time || 'undefined'}
+                    </small>
+                  </>
+                )}
+              </span>
+            </div>
+
+            <div className="info-row">
+              <span className="info-label">
                 <TrendingUp size={16} style={{ display: 'inline', marginRight: '8px' }} />
                 OTS:
               </span>
@@ -138,7 +191,7 @@ const CreativeModal: React.FC<CreativeModalProps> = ({ isOpen, onClose, data }) 
                 <Activity size={16} style={{ display: 'inline', marginRight: '8px' }} />
                 Статус:
               </span>
-              <span className="creative-status">
+              <span className={`creative-status ${data.status === 'Активен' ? 'active' : 'inactive'}`}>
                 <span className="status-indicator"></span>
                 {data.status}
               </span>
@@ -150,34 +203,68 @@ const CreativeModal: React.FC<CreativeModalProps> = ({ isOpen, onClose, data }) 
             <div className="material-header">
               <span className="material-label">Креативный материал:</span>
             </div>
-            <div className="material-preview" onClick={handlePreviewClick}>
-              <div className="material-icon">
-                {getMediaIcon(data.media)}
+            
+            {data.file_link ? (
+              <div className="material-preview">
+                <div className="creative-image-container" onClick={handleImageClick}>
+                  <img 
+                    src={data.file_link} 
+                    alt={`Креатив ${data.brand}`}
+                    className="creative-image"
+                    onError={(e) => {
+                      // Если изображение не загрузилось, показываем иконку
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent) {
+                        parent.classList.add('image-error');
+                      }
+                    }}
+                  />
+                  <div className="image-overlay">
+                    <Eye size={20} />
+                    <span>Нажмите для увеличения</span>
+                  </div>
+                </div>
               </div>
-              <div className="material-info">
-                <div className="material-title">Материал для {data.media}</div>
-                {/* <div className="material-subtitle">Нажмите для просмотра</div> */}
+            ) : (
+              <div className="material-preview" onClick={handlePreviewClick}>
+                <div className="material-icon">
+                  {getMediaIcon(data.media)}
+                </div>
+                <div className="material-info">
+                  <div className="material-title">Материал для {data.media}</div>
+                  <div className="material-subtitle">Изображение недоступно</div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Кнопки действий */}
-          <div className="modal-actions">
-            {/* <button className="modal-button secondary" onClick={handleShare}>
-              <Share2 size={18} />
-              Поделиться
-            </button> */}
-            <button className="modal-button secondary" onClick={handleDownload}>
-              <Download size={18} />
-              Скачать
-            </button>
-            {/* <button className="modal-button primary" onClick={handlePreviewClick}>
-              <Eye size={18} />
-              Просмотреть
-            </button> */}
-          </div>
+         
         </div>
       </div>
+
+      {/* Модальное окно с полным изображением */}
+      {isImageModalOpen && data.file_link && (
+        <div className="image-modal-overlay" onClick={handleImageModalOverlayClick}>
+          <div className="image-modal">
+            <div className="image-modal-header">
+              <h3>Креатив {data.brand}</h3>
+              <button className="image-modal-close" onClick={handleImageModalClose}>
+                <X size={20} />
+              </button>
+            </div>
+            <div className="image-modal-content">
+              <img 
+                src={data.file_link} 
+                alt={`Креатив ${data.brand}`}
+                className="full-size-image"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -8,7 +8,7 @@
 /* Главная область контента */
 .dashboard-main {
   flex: 1;
-  margin-left: 246px; /* Ширина развернутого сайдбара */
+  margin-left: 15.375rem; /* 246px -> rem */
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   background: #f8f9fb;
@@ -16,7 +16,7 @@
 
 /* Когда сайдбар свернут */
 .dashboard-main.collapsed {
-  margin-left: 64px; /* Ширина свернутого сайдбара */
+  margin-left: 4rem; /* 64px -> rem */
 }
 
 /* Контентная область */
@@ -28,7 +28,7 @@
 
 /* Базовые стили для страниц */
 .page-container {
-  padding: 32px;
+  padding: 2vw 2vw;
   min-height: 100vh;
   background: #f8f9fb;
   transition: all 0.3s ease;
@@ -36,7 +36,7 @@
 
 /* Для временных заглушек */
 .placeholder-page {
-  padding: 32px;
+  padding: 2vw 2vw;
   min-height: 100vh;
   background: #f8f9fb;
   display: flex;
@@ -50,33 +50,75 @@
 
 .placeholder-page div {
   background: #fff;
-  padding: 48px;
-  border-radius: 16px;
+  padding: 3vw 3vw;
+  border-radius: 1rem;
   box-shadow: 0 2px 16px rgba(44, 62, 80, 0.08);
 }
 
-/* Адаптивность для мобильных устройств */
+/* Адаптивность для больших экранов */
+@media (max-width: 1200px) {
+  .dashboard-main {
+    margin-left: 12rem;
+  }
+  .dashboard-main.collapsed {
+    margin-left: 3rem;
+  }
+  .page-container {
+    padding: 2vw 1vw;
+  }
+}
+
+@media (max-width: 992px) {
+  .dashboard-main {
+    margin-left: 8rem;
+  }
+  .dashboard-main.collapsed {
+    margin-left: 2rem;
+  }
+  .page-container {
+    padding: 1.5vw 1vw;
+  }
+}
+
+/* Адаптивность для планшетов и мобильных устройств */
 @media (max-width: 768px) {
   .dashboard-main {
     margin-left: 0;
   }
-  
   .dashboard-main.sidebar-collapsed {
     margin-left: 0;
   }
-  
   .page-container {
-    padding: 16px;
+    padding: 4vw 2vw;
   }
-  
   .placeholder-page {
-    padding: 16px;
+    padding: 4vw 2vw;
+    font-size: 1.1rem;
+  }
+  .placeholder-page div {
+    padding: 6vw 2vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-main {
+    margin-left: 0;
+  }
+  .page-container {
+    padding: 2vw 1vw;
+  }
+  .placeholder-page {
+    padding: 2vw 1vw;
+    font-size: 1rem;
+  }
+  .placeholder-page div {
+    padding: 4vw 1vw;
   }
 }
 
 /* Глобальные стили для скроллбара */
 .dashboard-content::-webkit-scrollbar {
-  width: 6px;
+  width: 0.4em;
 }
 
 .dashboard-content::-webkit-scrollbar-track {
@@ -85,7 +127,7 @@
 
 .dashboard-content::-webkit-scrollbar-thumb {
   background: #c1c1c1;
-  border-radius: 3px;
+  border-radius: 0.2em;
 }
 
 .dashboard-content::-webkit-scrollbar-thumb:hover {

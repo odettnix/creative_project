@@ -1,294 +1,971 @@
 .monitoring-page {
-    padding: 32px;
-    background: #f8f9fb;
-    min-height: 100vh;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 32px;
+  background: #f8f9fb;
+  min-height: 100vh;
+}
+
+.monitoring-page h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  /* color: #1a1b23; */
+  margin-bottom: 32px;
+}
+
+/* Фильтры */
+.monitoring-filters {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(44, 62, 80, 0.08);
+  padding: 24px;
+  margin-bottom: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* Импорт общих стилей для селектов */
+@import './SelectStyles.css';
+
+/* Статистические карточки */
+.monitoring-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px 24px;
+  box-shadow: 0 4px 20px rgba(44, 62, 80, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.stat-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon.tv {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+}
+
+.stat-icon.radio {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: #fff;
+}
+
+.stat-icon.online {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: #fff;
+}
+
+.stat-icon.banner {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  color: #fff;
+}
+
+.stat-icon.outdoor {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  color: #fff;
+}
+
+.stat-title {
+  color: #6b7280;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 4px 0;
+  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-subtitle {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+/* Таблица мониторинга */
+.monitoring-table-wrapper {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  overflow-x: auto;
+  box-shadow: 0 2px 16px rgba(44, 62, 80, 0.08);
+  max-width: 100vw;
+  margin-bottom: 24px;
+}
+
+.monitoring-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: auto;
+}
+
+.monitoring-table thead th {
+  position: sticky;
+  top: 0;
+  background: #f8f9fb;
+  color: #374151;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 12px 8px;
+  border-bottom: 2px solid #e5e7eb;
+  z-index: 2;
+  text-align: left;
+}
+
+.monitoring-table tbody td {
+  background: #fff;
+  color: #1f2937;
+  font-size: 0.97rem;
+  padding: 10px 8px;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+
+.monitoring-table tbody tr:hover {
+  background: #f8f9fb;
+}
+
+.monitoring-table th.id-header, .monitoring-table td.id-value {
+  text-align: center;
+  vertical-align: middle;
+  font-size: 1rem;
+  font-weight: 700;
+  padding-left: 0;
+  padding-right: 0;
+  line-height: 1.2;
+}
+
+.id-value {
+  min-width: 70px;
+  max-width: 90px;
+  width: 80px;
+  text-align: center;
+  font-weight: 600;
+  color: #6c63ff;
+  word-break: break-all;
+  font-size: 1rem;
+  vertical-align: middle;
+  padding-left: 0;
+  padding-right: 0;
+  line-height: 1.2;
+}
+
+.brand-name, .category, .subcategory {
+  max-width: 180px;
+  min-width: 100px;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.ots-value, .status-badge, .action-button, .media-badge {
+  min-width: 90px;
+  max-width: 140px;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  min-width: 80px;
+}
+
+.status-badge.active {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.status-badge.inactive {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.action-button {
+  background: #6c63ff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  min-width: 110px;
+  max-width: 120px;
+  text-align: center;
+  display: block;
+  margin: 0 auto;
+}
+
+.action-button:hover {
+  background: #5146d6;
+}
+
+.media-badge {
+  background: #d1fae5;
+  color: #059669;
+  border-radius: 12px;
+  padding: 4px 8px;
+  font-size: 0.93rem;
+  font-weight: 600;
+  display: inline-block;
+  min-width: 140px;
+  max-width: 180px;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* Специальные стили для колонок */
+/* Категория и подкатегория - переносим текст */
+.monitoring-table td:nth-child(4),
+.monitoring-table td:nth-child(5) {
+  min-width: 100px;
+  max-width: 150px;
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+}
+
+/* OTS - не переносим */
+.ots-value {
+  white-space: nowrap;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Действия */
+.action-button {
+  white-space: nowrap;
+  min-width: 100px;
+}
+
+/* Медиа бейдж */
+.media-badge {
+  white-space: nowrap;
+  min-width: 120px;
+}
+
+/* Медиа бейджи */
+.media-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  min-width: 120px;
+}
+
+.media-badge.tv {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.media-badge.radio {
+  background: #fce7f3;
+  color: #ec4899;
+}
+
+.media-badge.online {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.media-badge.banner {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.media-badge.outdoor {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+/* Статус бейдж */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.status-badge.active {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.status-badge.inactive {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Кнопки действий */
+.action-button {
+  background: #6c63ff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-width: 100px;
+}
+
+.action-button:hover {
+  background: #5146d6;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+}
+
+/* Сообщения об ошибках и загрузке */
+.error-message {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.loading-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #6b7280;
+  font-size: 1rem;
+  background: #fff;
+  border-radius: 12px;
+  margin: 16px 0;
+}
+
+/* Пагинация */
+.pagination-container {
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pagination-info {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 12px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.pagination-button {
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #374151;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  min-width: 40px;
+  transition: all 0.2s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background: #f8f9fb;
+  border-color: #d1d5db;
+}
+
+.pagination-button.active {
+  background: #6c63ff;
+  border-color: #6c63ff;
+  color: white;
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Адаптивные стили для разных размеров экрана */
+
+/* Экраны до 1200px */
+@media (max-width: 1200px) {
+  .monitoring-page {
+    padding: 24px 20px;
   }
   
-  .monitoring-page h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #1a1b23;
-    margin-bottom: 32px;
-  }
-  
-  /* Фильтры */
   .monitoring-filters {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 2px 16px rgba(44, 62, 80, 0.08);
-    padding: 24px;
-    margin-bottom: 24px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    padding: 20px;
   }
   
-  .filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  .date-range-picker {
+    min-width: 200px;
   }
   
-  .filter-label {
-    font-weight: 600;
-    color: #374151;
-    font-size: 0.875rem;
-    margin-bottom: 4px;
-  }
-  
-  .filter-select {
-    padding: 12px 16px;
-    border: 2px solid #e5e7eb;
-    border-radius: 12px;
-    background: #fff;
-    color: #374151;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 12px center;
-    background-repeat: no-repeat;
-    background-size: 16px;
-    padding-right: 40px;
-  }
-  
-  .filter-select:hover {
-    border-color: #d1d5db;
-  }
-  
-  .filter-select:focus {
-    outline: none;
-    border-color: #6c63ff;
-    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
-  }
-  
-  /* Статистические карточки */
   .monitoring-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin-bottom: 24px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
   }
   
   .stat-card {
-    background: #fff;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 2px 16px rgba(44, 62, 80, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(44, 62, 80, 0.12);
-  }
-  
-  .stat-card-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
+    padding: 24px 20px;
   }
   
   .stat-icon {
     width: 48px;
     height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-size: 1.5rem;
   }
   
-  .stat-icon.tv {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #fff;
+  .stat-value {
+    font-size: 1.9rem;
+  }
+}
+
+/* Планшеты до 992px */
+@media (max-width: 992px) {
+  .monitoring-page h1 {
+    font-size: 1.75rem;
+    margin-bottom: 24px;
   }
   
-  .stat-icon.radio {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: #fff;
+  .monitoring-filters {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 18px;
   }
   
-  .stat-icon.online {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    color: #fff;
+  .monitoring-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
   }
   
-  .stat-icon.banner {
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    color: #fff;
+  .stat-card {
+    padding: 20px 18px;
   }
   
-  .stat-icon.outdoor {
-    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-    color: #fff;
+  .stat-card-header {
+    gap: 12px;
+    margin-bottom: 16px;
   }
   
-  .stat-title {
-    color: #6b7280;
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin: 0;
+  .stat-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.4rem;
   }
   
   .stat-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #1f2937;
-    margin: 0;
+    font-size: 1.8rem;
   }
   
-  .stat-subtitle {
-    color: #9ca3af;
-    font-size: 0.875rem;
-    margin-top: 4px;
-  }
-  
-  /* Таблица */
   .monitoring-table-wrapper {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 2px 16px rgba(44, 62, 80, 0.08);
-    overflow: hidden;
+    overflow-x: auto;
   }
   
   .monitoring-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.95rem;
+    min-width: 900px;
+  }
+}
+
+/* Мобильные устройства до 768px */
+@media (max-width: 768px) {
+  .monitoring-page {
+    padding: 16px;
+    margin-left: 0;
+  }
+  
+  .monitoring-page h1 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .monitoring-filters {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .date-range-picker {
+    min-width: 100%;
+  }
+  
+  .filter-select {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    padding-right: 36px;
+  }
+  
+  .monitoring-stats {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .stat-card {
+    padding: 20px 18px;
+  }
+  
+  .stat-card-header {
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.3rem;
+  }
+  
+  .stat-value {
+    font-size: 1.7rem;
+  }
+  
+  .stat-title {
+    font-size: 0.85rem;
+  }
+  
+  .stat-subtitle {
+    font-size: 0.85rem;
+  }
+  
+  .monitoring-table-wrapper {
+    overflow-x: auto;
+    border-radius: 12px;
+  }
+  
+  .monitoring-table {
+    min-width: 800px;
+  }
+  
+  .monitoring-table th,
+  .monitoring-table td {
+    padding: 12px 16px;
+    font-size: 0.85rem;
   }
   
   .monitoring-table th {
-    background: #f8fafc;
-    padding: 16px 20px;
-    text-align: left;
-    font-weight: 600;
-    color: #374151;
-    border-bottom: 2px solid #e5e7eb;
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-size: 0.8rem;
   }
   
+  .media-badge {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+  }
+  
+  .status-badge {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+  }
+  
+  .action-button {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Малые мобильные устройства до 480px */
+@media (max-width: 480px) {
+  .monitoring-page {
+    padding: 12px 8px;
+  }
+  
+  .monitoring-page h1 {
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+  }
+  
+  .monitoring-filters {
+    padding: 12px;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  
+  .filter-label {
+    font-size: 0.8rem;
+  }
+  
+  .filter-select {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    padding-right: 32px;
+  }
+  
+  .monitoring-stats {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .stat-card {
+    padding: 16px;
+  }
+  
+  .stat-card-header {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .stat-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+  }
+  
+  .stat-title {
+    font-size: 0.8rem;
+  }
+  
+  .stat-subtitle {
+    font-size: 0.8rem;
+  }
+  
+  .monitoring-table-wrapper {
+    border-radius: 8px;
+  }
+  
+  .monitoring-table {
+    min-width: 700px;
+  }
+  
+  .monitoring-table th,
   .monitoring-table td {
-    padding: 16px 20px;
-    color: #1f2937;
-    border-bottom: 1px solid #f3f4f6;
+    padding: 8px 12px;
+    font-size: 0.8rem;
   }
   
-  .monitoring-table tbody tr:hover {
-    background: #f8fafc;
-  }
-  
-  .monitoring-table tbody tr:last-child td {
-    border-bottom: none;
+  .monitoring-table th {
+    font-size: 0.75rem;
   }
   
   .brand-name {
-    font-weight: 600;
-    color: #1f2937;
+    font-size: 0.8rem;
   }
   
-  /* Медиа бейджи */
   .media-badge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+    padding: 3px 6px;
+    font-size: 0.65rem;
   }
   
-  .media-badge.tv {
-    background: #ede9fe;
-    color: #7c3aed;
-  }
-  
-  .media-badge.radio {
-    background: #fce7f3;
-    color: #ec4899;
-  }
-  
-  .media-badge.online {
-    background: #dbeafe;
-    color: #2563eb;
-  }
-  
-  .media-badge.banner {
-    background: #d1fae5;
-    color: #059669;
-  }
-  
-  .media-badge.outdoor {
-    background: #fef3c7;
-    color: #d97706;
-  }
-  
-  /* Статус */
   .status-badge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    background: #d1fae5;
-    color: #059669;
+    padding: 3px 6px;
+    font-size: 0.65rem;
   }
   
-  /* Кнопки действий */
   .action-button {
-    background: #6c63ff;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 16px;
-    cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-  
-  .action-button:hover {
-    background: #5146d6;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(108, 99, 255, 0.3);
+    padding: 4px 8px;
+    font-size: 0.75rem;
   }
   
   .ots-value {
-    font-weight: 600;
-    font-size: 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Очень узкие экраны до 360px */
+@media (max-width: 360px) {
+  .monitoring-page {
+    padding: 8px 4px;
   }
   
-  /* Адаптивность */
-  @media (max-width: 768px) {
-    .monitoring-page {
-      padding: 16px;
-      margin-left: 0; /* На мобильных убираем отступ */
-    }
-    
-    .monitoring-filters {
-      grid-template-columns: 1fr;
-      padding: 20px;
-    }
-    
-    .monitoring-stats {
-      grid-template-columns: 1fr;
-    }
-    
-    .monitoring-table-wrapper {
-      overflow-x: auto;
-    }
-    
-    .monitoring-table {
-      min-width: 800px;
-    }
-    
-    .monitoring-table th,
-    .monitoring-table td {
-      padding: 12px 16px;
-    }
+  .monitoring-page h1 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
   }
+  
+  .monitoring-filters {
+    padding: 8px;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .filter-select {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    padding-right: 28px;
+  }
+  
+  .monitoring-stats {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .stat-card {
+    padding: 8px;
+  }
+  
+  .stat-card-header {
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  
+  .stat-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
+  
+  .stat-value {
+    font-size: 1.2rem;
+  }
+  
+  .monitoring-table {
+    min-width: 450px;
+  }
+  
+  .monitoring-table th,
+  .monitoring-table td {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+  
+  .monitoring-table th {
+    font-size: 0.7rem;
+  }
+}
+
+/* Улучшения для touch интерфейсов */
+@media (hover: none) and (pointer: coarse) {
+  .action-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .filter-select {
+    min-height: 44px;
+  }
+  
+  .stat-card:hover {
+    transform: none;
+    box-shadow: 0 4px 20px rgba(44, 62, 80, 0.12);
+  }
+  
+  .action-button:hover {
+    transform: none;
+  }
+}
+
+/* Адаптивность для пагинации */
+@media (max-width: 768px) {
+  .pagination-container {
+    padding: 16px;
+    margin-top: 16px;
+  }
+  
+  .pagination {
+    gap: 4px;
+  }
+  
+  .pagination-button {
+    padding: 6px 10px;
+    font-size: 12px;
+    min-width: 36px;
+  }
+}
+
+/* Адаптивность для таблицы */
+@media (max-width: 1200px) {
+  .monitoring-table {
+    min-width: 700px;
+  }
+  .brand-name, .category, .subcategory {
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 992px) {
+  .monitoring-table {
+    font-size: 12px;
+    min-width: 700px;
+  }
+  
+  .monitoring-table th,
+  .monitoring-table td {
+    padding: 8px 4px;
+  }
+  
+  .id-value {
+    min-width: 30px;
+    max-width: 50px;
+    font-size: 11px;
+  }
+  
+  .brand-name {
+    min-width: 80px;
+    max-width: 120px;
+  }
+  
+  .monitoring-table td:nth-child(4),
+  .monitoring-table td:nth-child(5) {
+    min-width: 60px;
+    max-width: 100px;
+  }
+  
+  .ots-value {
+    min-width: 50px;
+  }
+  
+  .status-badge {
+    min-width: 70px;
+  }
+  
+  .action-button {
+    min-width: 80px;
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+  
+  .media-badge {
+    min-width: 100px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .monitoring-table-wrapper {
+    margin-top: 16px;
+  }
+  
+  .monitoring-table {
+    min-width: 600px;
+    font-size: 0.9rem;
+  }
+  
+  .monitoring-table th,
+  .monitoring-table td {
+    padding: 6px 3px;
+  }
+  
+  .id-value {
+    min-width: 25px;
+    max-width: 40px;
+    font-size: 10px;
+  }
+  
+  .brand-name {
+    min-width: 60px;
+    max-width: 100px;
+  }
+  
+  .monitoring-table td:nth-child(4),
+  .monitoring-table td:nth-child(5) {
+    min-width: 50px;
+    max-width: 80px;
+  }
+  
+  .ots-value {
+    min-width: 40px;
+    font-size: 10px;
+  }
+  
+  .status-badge {
+    min-width: 60px;
+    font-size: 10px;
+  }
+  
+  .action-button {
+    min-width: 70px;
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+  
+  .media-badge {
+    min-width: 80px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .monitoring-table {
+    min-width: 400px;
+    font-size: 0.8rem;
+  }
+  .brand-name, .category, .subcategory {
+    max-width: 60px;
+    font-size: 0.8rem;
+  }
+  .id-value, .ots-value, .status-badge, .action-button, .media-badge {
+    min-width: 40px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Стили для скроллбара */
+.monitoring-table-wrapper::-webkit-scrollbar {
+  width: 0.4em;
+}
+
+.monitoring-table-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.monitoring-table-wrapper::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 0.2em;
+}
+
+.monitoring-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

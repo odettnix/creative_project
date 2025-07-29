@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Analytics.css';
 import { TrendingUp, BarChart3, PieChart, Activity, Target } from 'lucide-react';
+import CategorySelect from './CategorySelect';
+import SubcategorySelect from './SubcategorySelect';
+import { creativeService, TopCategoryItem, TopSubcategoryItem, Category, Subcategory } from '../api';
 import { 
   AreaChart,
   Area,
@@ -39,24 +42,6 @@ const dynamicsData = [
   { month: 'Нед 12', creatives: 78000 }
 ];
 
-// Данные для топ категорий
-const topCategoriesData = [
-  { category: 'Банки', creatives: 185000, color: '#8b5cf6' },
-  { category: 'Автомобили', creatives: 160000, color: '#22c55e' },
-  { category: 'Еда и напитки', creatives: 95000, color: '#f59e0b' },
-  { category: 'Телекоммуникации', creatives: 115000, color: '#06b6d4' },
-  { category: 'Красота и здоровье', creatives: 88000, color: '#fb7185' }
-];
-
-// Данные для топ подкатегорий
-const topSubcategoriesData = [
-  { subcategory: 'Кредиты', creatives: 95000, color: '#f59e0b' },
-  { subcategory: 'Легковые авто', creatives: 88000, color: '#06b6d4' },
-  { subcategory: 'Безалкогольные напитки', creatives: 75000, color: '#fb7185' },
-  { subcategory: 'Мобильная связь', creatives: 65000, color: '#ef4444' },
-  { subcategory: 'Косметика', creatives: 58000, color: '#fbbf24' }
-];
-
 // Данные для прогноза на ближайший месяц
 const forecastData = [
   { date: '2025-01-01', actual: 220, forecast: null },
@@ -92,11 +77,82 @@ const Dashboard: React.FC<DashboardProps> = ({ sidebarCollapsed = false }) => {
     subcategory: 'Все подкатегории'
   });
 
+  const [topCategories, setTopCategories] = useState<TopCategoryItem[]>([]);
+  const [topSubcategories, setTopSubcategories] = useState<TopSubcategoryItem[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Загрузка данных при монтировании компонента
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const [topCategoriesData, topSubcategoriesData, categoriesData, subcategoriesData] = await Promise.all([
+        creativeService.getTopCategories(),
+        creativeService.getTopSubcategories(),
+        creativeService.getCategories(),
+        creativeService.getSubcategories(),
+      ]);
+      
+      setTopCategories(topCategoriesData);
+      setTopSubcategories(topSubcategoriesData);
+      setCategories(categoriesData);
+      setSubcategories(subcategoriesData);
+      
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ошибка загрузки данных');
+      console.error('Error loading data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleFilterChange = (filterName: string, value: string) => {
     setFilters(prev => ({
       ...prev,
       [filterName]: value
     }));
+  };
+
+  // Преобразование данных из API в формат для графиков
+  const getTopCategoriesData = () => {
+    return topCategories.map(item => {
+      const category = categories.find(cat => cat.id === item.category_id);
+      return {
+        category: category?.name || `Категория ${item.category_id}`,
+        creatives: item.count,
+        color: getCategoryColor(item.category_id)
+      };
+    });
+  };
+
+  const getTopSubcategoriesData = () => {
+    return topSubcategories.map(item => {
+      const subcategory = subcategories.find(sub => sub.id === item.subcategory_id);
+      return {
+        subcategory: subcategory?.name || `Подкатегория ${item.subcategory_id}`,
+        creatives: item.count,
+        color: getSubcategoryColor(item.subcategory_id)
+      };
+    });
+  };
+
+  // Функции для генерации цветов
+  const getCategoryColor = (categoryId: number): string => {
+    const colors = ['#8b5cf6', '#22c55e', '#f59e0b', '#06b6d4', '#fb7185'];
+    return colors[categoryId % colors.length];
+  };
+
+  const getSubcategoryColor = (subcategoryId: number): string => {
+    const colors = ['#f59e0b', '#06b6d4', '#fb7185', '#ef4444', '#fbbf24'];
+    return colors[subcategoryId % colors.length];
   };
 
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -181,42 +237,34 @@ const Dashboard: React.FC<DashboardProps> = ({ sidebarCollapsed = false }) => {
 
   return (
     <div className="dashboard-page">
+      {error && (
+        <div className="error-message">
+          {error}
+        </div>
+      )}
 
       {/* Фильтры */}
       <div className="dashboard-filters">
-        <div className="filter-group">
-          <label className="filter-label">Категория</label>
-          <select 
-            className="filter-select"
+        <CategorySelect
             value={filters.category}
-            onChange={(e) => handleFilterChange('category', e.target.value)}
-          >
-            <option>Все категории</option>
-            <option>Банки</option>
-            <option>Автомобили</option>
-            <option>Еда и напитки</option>
-            <option>Телекоммуникации</option>
-            <option>Красота и здоровье</option>
-          </select>
-        </div>
+          onChange={(value) => handleFilterChange('category', value)}
+          placeholder="Все категории"
+        />
         
-        <div className="filter-group">
-          <label className="filter-label">Подкатегория</label>
-          <select 
-            className="filter-select"
+        <SubcategorySelect
             value={filters.subcategory}
-            onChange={(e) => handleFilterChange('subcategory', e.target.value)}
-          >
-            <option>Все подкатегории</option>
-            <option>Кредиты</option>
-            <option>Депозиты</option>
-            <option>Ипотека</option>
-            <option>Легковые авто</option>
-            <option>Безалкогольные напитки</option>
-          </select>
-        </div>
+          onChange={(value) => handleFilterChange('subcategory', value)}
+          selectedCategory={filters.category}
+          placeholder="Все подкатегории"
+        />
       </div>
 
+      {loading ? (
+        <div className="loading-message">
+          Загрузка данных...
+        </div>
+      ) : (
+        <>
       {/* Основная сетка */}
       <div className="dashboard-grid">
         {/* Динамика выходов */}
@@ -255,7 +303,7 @@ const Dashboard: React.FC<DashboardProps> = ({ sidebarCollapsed = false }) => {
           <h3><BarChart3 size={20} />Топ категории</h3>
           <div className="chart-container">
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={topCategoriesData} layout="vertical" margin={{ left: 20, right: 20 }}>
+                  <BarChart data={getTopCategoriesData()} layout="vertical" margin={{ left: 20, right: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
                 <XAxis 
                   type="number"
@@ -276,7 +324,7 @@ const Dashboard: React.FC<DashboardProps> = ({ sidebarCollapsed = false }) => {
                   radius={[0, 4, 4, 0]}
                   name="Креативы"
                 >
-                  {topCategoriesData.map((entry, index) => (
+                      {getTopCategoriesData().map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Bar>
@@ -291,7 +339,7 @@ const Dashboard: React.FC<DashboardProps> = ({ sidebarCollapsed = false }) => {
         <h3><PieChart size={20} />Топ подкатегории</h3>
         <div className="chart-container">
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={topSubcategoriesData}>
+                <BarChart data={getTopSubcategoriesData()}>
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
               <XAxis 
                 dataKey="subcategory" 
@@ -311,7 +359,7 @@ const Dashboard: React.FC<DashboardProps> = ({ sidebarCollapsed = false }) => {
                 radius={[4, 4, 0, 0]}
                 name="Креативы"
               >
-                {topSubcategoriesData.map((entry, index) => (
+                    {getTopSubcategoriesData().map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Bar>
@@ -319,6 +367,8 @@ const Dashboard: React.FC<DashboardProps> = ({ sidebarCollapsed = false }) => {
           </ResponsiveContainer>
         </div>
       </div>
+        </>
+      )}
 
       {/* Анализ трендов */}
       <div className="dashboard-card dashboard-full-width">

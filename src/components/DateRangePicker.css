@@ -1,0 +1,371 @@
+.date-range-picker {
+  position: relative;
+  display: inline-block;
+}
+
+.date-range-button {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+  color: #374151;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  appearance: none;
+  min-height: 48px;
+}
+
+.date-range-button:hover {
+  border-color: #d1d5db;
+}
+
+.date-range-button:focus {
+  outline: none;
+  border-color: #6c63ff;
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+}
+
+.date-range-display {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.chevron-down {
+  color: #6b7280;
+  transition: transform 0.2s ease;
+}
+
+.chevron-down.rotated {
+  transform: rotate(180deg);
+}
+
+.date-range-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  margin-top: 4px;
+  min-width: 320px;
+  overflow: hidden;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f3f4f6;
+  background: #f8fafc;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-button:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.month-year-selector {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.month-selector,
+.year-selector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.month-selector:hover,
+.year-selector:hover {
+  background: #e5e7eb;
+}
+
+.month-dropdown,
+.year-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  max-height: 200px;
+  overflow-y: auto;
+  min-width: 120px;
+  margin-top: 4px;
+}
+
+.month-option,
+.year-option {
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.month-option:hover,
+.year-option:hover {
+  background: #f8fafc;
+}
+
+.month-option.selected,
+.year-option.selected {
+  background: #6c63ff;
+  color: #fff;
+}
+
+.month-option.selected:hover,
+.year-option.selected:hover {
+  background: #5146d6;
+}
+
+.today-button-container {
+  display: flex;
+  justify-content: center;
+  padding: 8px 20px;
+  border-bottom: 1px solid #f3f4f6;
+  background: #f8fafc;
+}
+
+.today-button {
+  background: #6c63ff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.today-button:hover {
+  background: #5146d6;
+}
+
+.today-button:active {
+  transform: translateY(1px);
+}
+
+.calendar-grid {
+  padding: 16px 20px;
+}
+
+.calendar-days-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.day-header {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 4px;
+}
+
+.calendar-weeks {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.calendar-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  padding: 2px;
+}
+
+.calendar-week:hover {
+  background: #f3f4f6;
+}
+
+.calendar-week.selected-week {
+  background: #fef3c7;
+}
+
+.calendar-week.hovered-week {
+  background: #fef3c7;
+  opacity: 0.7;
+}
+
+.calendar-week.selected-range,
+.calendar-week.in-range {
+  background: #ffe066 !important;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(255, 224, 102, 0.15);
+}
+
+.calendar-week.selected-range .calendar-day,
+.calendar-week.in-range .calendar-day {
+  background: #ffe066 !important;
+  color: #222;
+  font-weight: 600;
+}
+
+.calendar-week.temp-range {
+  background: #fff9db !important;
+  border-radius: 8px;
+}
+
+.calendar-week.temp-range .calendar-day {
+  background: #fff9db !important;
+  color: #b59a00;
+  font-weight: 600;
+}
+
+.calendar-day {
+  text-align: center;
+  padding: 8px 4px;
+  font-size: 0.875rem;
+  color: #1f2937;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  position: relative;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-day.other-month {
+  color: #9ca3af;
+}
+
+.calendar-day.today {
+  background: #6c63ff;
+  color: #fff;
+  font-weight: 600;
+}
+
+.calendar-day:hover {
+  background: #e5e7eb;
+}
+
+.selected-week .calendar-day {
+  background: #fbbf24;
+  color: #92400e;
+  font-weight: 600;
+}
+
+.selected-week .calendar-day.other-month {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.selected-week .calendar-day.today {
+  background: #f59e0b;
+  color: #fff;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .date-range-dropdown {
+    min-width: 280px;
+  }
+  
+  .calendar-header {
+    padding: 12px 16px;
+  }
+  
+  .calendar-grid {
+    padding: 12px 16px;
+  }
+  
+  .month-year-selector {
+    gap: 12px;
+    font-size: 0.9rem;
+  }
+  
+  .calendar-day {
+    font-size: 0.85rem;
+    padding: 6px;
+  }
+  
+  .day-header {
+    font-size: 0.8rem;
+    padding: 6px;
+  }
+  
+  .today-button {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .date-range-dropdown {
+    min-width: 260px;
+    left: -40px;
+    right: -40px;
+  }
+  
+  .calendar-header {
+    padding: 10px 12px;
+  }
+  
+  .calendar-grid {
+    padding: 10px 12px;
+  }
+  
+  .month-year-selector {
+    gap: 8px;
+    font-size: 0.85rem;
+  }
+  
+  .calendar-day {
+    font-size: 0.8rem;
+    padding: 4px;
+  }
+  
+  .day-header {
+    font-size: 0.75rem;
+    padding: 4px;
+  }
+  
+  .today-button {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+} 
