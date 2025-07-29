@@ -1,6 +1,6 @@
 import React from 'react';
 import './Sidebar.css';
-import { GanttChart, User, LayoutDashboard, Monitor, BarChart3, GitBranch, Download, HelpCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { GanttChart, User, LayoutDashboard, Monitor, BarChart3, GitBranch, Download, HelpCircle, ChevronLeft, ChevronRight, LogOut } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 type LucideIcon = React.ComponentType<{ className?: string }>;
@@ -24,9 +24,10 @@ const bottomMenu: { icon: LucideIcon; label: string; to: string }[] = [
 type SidebarProps = {
   collapsed?: boolean;
   setCollapsed?: (v: boolean) => void;
+  onLogout?: () => void;
 };
 
-const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, setCollapsed }) => {
+const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, setCollapsed, onLogout }) => {
   const handleBottomItemClick = (label: string) => {
     console.log(`Clicked: ${label}`);
     // Здесь можно добавить логику для открытия модальных окон помощи или профиля
@@ -81,6 +82,17 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, setCollapsed }) =>
             </NavLink>
           );
         })}
+        
+        {onLogout && (
+          <button 
+            className="sidebar-logout" 
+            onClick={onLogout}
+            data-tooltip="Выйти"
+          >
+            <LogOut className="sidebar-icon" />
+            <span className="sidebar-text">Выйти</span>
+          </button>
+        )}
       </div>
     </aside>
   );

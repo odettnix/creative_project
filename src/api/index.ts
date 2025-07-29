@@ -6,6 +6,7 @@ export { apiClient } from './client';
 
 // Экспорт сервисов
 export { creativeService, CreativeService } from './creativeService';
+export { profileService } from './profileService';
 
 // Экспорт типов
 export type {
@@ -23,5 +24,7 @@ export type {
   MonitoringData,
   MonitoringFilters,
   AnalyticsDashboard,
+  UserProfile,
+  ProfileUpdateData,
   ExportOptions,
 } from './config'; 

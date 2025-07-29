@@ -61,8 +61,8 @@ export const API_CONFIG = {
     
     // Профиль
     PROFILE: {
-      GET_PROFILE: '/profile',
-      UPDATE_PROFILE: '/profile/update',
+      GET_PROFILE: '/users/me',
+      UPDATE_PROFILE: '/users/me',
     },
   },
 };
@@ -211,6 +211,20 @@ export interface AnalyticsDashboard {
   activeCampaigns: number;
   totalReach: number;
   growthRate: number;
+}
+
+// Типы для профиля
+export interface UserProfile {
+  id: number;
+  full_name: string;
+  email: string;
+  role: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ProfileUpdateData {
+  full_name?: string;
 }
 
 // Типы для экспорта
